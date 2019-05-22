@@ -13,11 +13,10 @@ RUN apt-get update -qy \
     python3-pyroute2 \
     socat \
     qemu-kvm \
+    curl \
  && apt-get -y autoremove \
  && rm -rf /var/lib/apt/lists/*
-
-ARG IMAGE
-COPY asav992.qcow2 /
+ 
 COPY *.py /
 COPY *.conf /
 

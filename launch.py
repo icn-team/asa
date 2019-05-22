@@ -65,6 +65,11 @@ def run_command(cmd, cwd=None, background=False):
     return res
 
 
+def download_file(url):
+    ret = subprocess.run(["curl", "-OL", url])
+    return not ret.returncode
+
+
 class VM:
     def __str__(self):
         return self.__class__.__name__
@@ -337,6 +342,10 @@ class VR:
                     self.update_health(1, "starting")
 
 
+class DownloadFailed(Exception):
+    """The download failed
+    """
+
 class QemuBroken(Exception):
     """ Our Qemu instance is somehow broken
     """
@@ -344,6 +353,9 @@ class QemuBroken(Exception):
 
 class ASA_vm(VM):
     def __init__(self, username, password):
+        if not download_file("http://icn-ucs-2.cisco.com/asav992.qcow2"):
+            raise DownloadFailed("Unable to download ASA image")
+
         for e in os.listdir("/"):
             if re.search(".qcow2", e):
                 disk_image = "/" + e
