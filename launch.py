@@ -452,7 +452,7 @@ class ASA_vm(VM):
         ipr.link('set', index=dev_tap_inside, master=dev_br_inside)
 
         dev_veth_inside = ipr.link_lookup(ifname=self.veth_inside)[0]
-        ipr.addr('flush', index=dev_veth_inside)
+        ipr.flush_addr(index=dev_veth_inside)
         ipr.link('set', index=dev_veth_inside, master=dev_br_inside)
 
         # Add outside tap and outside veth to outside bridge
@@ -460,7 +460,7 @@ class ASA_vm(VM):
         ipr.link('set', index=dev_tap_outside, master=dev_br_outside)
 
         dev_veth_outside = ipr.link_lookup(ifname=self.veth_outside)[0]
-        ipr.addr('flush', index=dev_veth_outside)
+        ipr.flush_addr(index=dev_veth_outside)
         ipr.link('set', index=dev_veth_outside, master=dev_br_outside)
 
         # Bring interfaces up
