@@ -369,6 +369,7 @@ class ASA_vm(VM):
         self.veth_outside = "eth2"
         self.tap_inside = "tap1"
         self.tap_outside = "tap2"
+        self.tap_mgmt = "tap0"
 
     def gen_mgmt(self):
         """ Generate qemu args for the mgmt interface(s)
@@ -482,6 +483,11 @@ class ASA_vm(VM):
         ipr.link('set', index=dev_tap_outside, state='up')
         ipr.link('set', index=dev_veth_inside, state='up')
         ipr.link('set', index=dev_veth_outside, state='up')
+
+        dev_tap_mgmt = ipr.link_lookup(ifname=self.tap_mgmt)[0]
+        ipr.link('set', index=dev_tap_mgmt, state='up')
+        ipr.addr('add', index=dev_tap_mgmt,
+                 address='10.69.0.2', mask=24, broadcast='10.69.0.255')
 
     def bootstrap_config(self):
         """ Do the actual bootstrap config
