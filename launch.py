@@ -487,12 +487,17 @@ class ASA_vm(VM):
         """ Do the actual bootstrap config
         """
         self.logger.info("applying bootstrap configuration")
+
+        # Enter the configuration mode
+        self.wait_write("enable", wait=None)
+        self.wait_write("", wait="Password:")
+        self.wait_write("conf t")
         
         with open("./asa.conf", 'r') as config_file:
             for line in config_file:
                 line = line.strip()
                 if line and not line.startswith('#'):
-                    self.wait_write(line, wait=None)
+                    self.wait_write(line)
 
         return True
 
